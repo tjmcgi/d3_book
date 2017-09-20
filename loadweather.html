@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Today's Temperature</title>
+        <script type="text/javascript" src="d3.js"></script>
+    </head>
+    <body>
+        <p>Today's Temperature</p>
+        <script type="text/javascript">
+        var dataset;
+        var w = 500;
+        var h = 300;
+        var barPadding = 1;
+        var rowConverter = function(d) {
+            return {
+                hour: d.hour,
+                temp: Math.round(parseFloat(d.temp))
+            };
+        }
+        var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+        d3.tsv("today.tsv", rowConverter, function(data) {
+            dataset = data
+            svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")
+                .attr("x", function(d, i) {
+                    return i * (w / dataset.length);
+                })
+                .attr("y", function(d) {
+                    return h-d.temp * 3;
+                })
+                .attr("width", w/dataset.length - barPadding)
+                .attr("height", function(d) {
+                    return d.temp * 3;
+                })
+                .attr("fill", function(d) {
+                    return "rgb("+d.temp * 2+", 115, 255)";
+                });
+            svg.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("text")
+                .text(function(d) {
+                    return d.temp;
+                })
+                .attr("x", function(d, i) {
+                    return i * (w/dataset.length) + 5;
+                })
+                .attr("y", function(d) {
+                    return h - (d.temp * 3) + 15;
+                })
+                .attr("font-family", "sans-serif")
+                .attr("font-size", '11px')
+                .attr("fill", "white")
+            });
+        var svg2 = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+        d3.tsv("today.tsv", rowConverter, function(data) {
+            dataset = data
+            svg2.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")
+                .attr("x", function(d, i) {
+                    return i * (w / dataset.length);
+                })
+                .attr("y", function(d) {
+                    return h-d.temp * 3;
+                })
+                .attr("width", w/dataset.length - barPadding)
+                .attr("height", function(d) {
+                    return d.temp * 3;
+                })
+                .attr("fill", function(d) {
+                    return "rgb("+d.temp * 2+", 255, 50)";
+                });
+            svg2.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("text")
+                .text(function(d) {
+                    return d.temp;
+                })
+                .attr("x", function(d, i) {
+                    return i * (w/dataset.length) + 5;
+                })
+                .attr("y", function(d) {
+                    return h - (d.temp * 3) + 15;
+                })
+                .attr("font-family", "sans-serif")
+                .attr("font-size", '11px')
+                .attr("fill", "white")
+            });
+
+        </script>
+    </body>
+</html>
